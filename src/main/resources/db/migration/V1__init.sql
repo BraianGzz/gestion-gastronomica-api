@@ -1,0 +1,2 @@
+-- V1: Inicialización de la base de datos para Flyway
+-- Las tablas de cada módulo se irán agregando en migraciones sucesivas (V2__, V3__, etc.)
