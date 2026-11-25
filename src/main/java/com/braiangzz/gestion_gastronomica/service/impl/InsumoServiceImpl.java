@@ -65,6 +65,12 @@ public class InsumoServiceImpl implements InsumoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Insumo obtenerEntidadActivaPorId(Long id) {
+        return buscarActivoPorId(id);
+    }
+
+    @Override
     @Transactional
     public InsumoResponseDto actualizar(Long id, InsumoRequestDto request) {
         Insumo insumo = buscarActivoPorId(id);

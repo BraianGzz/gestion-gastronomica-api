@@ -18,6 +18,8 @@ public interface InsumoService {
 
     InsumoResponseDto obtenerPorId(Long id);
 
+    Insumo obtenerEntidadActivaPorId(Long id);
+
     InsumoResponseDto actualizar(Long id, InsumoRequestDto request);
 
     InsumoResponseDto ajustarStock(Long id, AjusteStockRequestDto request);
