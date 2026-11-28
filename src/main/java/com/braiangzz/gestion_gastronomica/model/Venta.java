@@ -60,8 +60,8 @@ public class Venta {
     @Column(name = "forma_pago", nullable = false, length = 20)
     private FormaPago formaPago;
 
-    @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal descuento = BigDecimal.ZERO;
+    @Column(nullable = false)
+    private Integer descuento = 0;
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal total;
@@ -93,7 +93,7 @@ public class Venta {
             this.estado = EstadoVenta.REGISTRADA;
         }
         if (this.descuento == null) {
-            this.descuento = BigDecimal.ZERO;
+            this.descuento = 0;
         }
     }
 

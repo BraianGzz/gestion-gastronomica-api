@@ -29,7 +29,7 @@ public class VentaResponseDto {
     private TipoEntrega tipoEntrega;
     private String direccion;
     private FormaPago formaPago;
-    private BigDecimal descuento;
+    private Integer descuento;
     private BigDecimal total;
     private List<LineaDeVentaResponseDto> lineas;
     private LocalDateTime createdAt;

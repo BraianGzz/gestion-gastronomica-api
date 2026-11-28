@@ -55,7 +55,7 @@ public class VentaServiceImpl implements VentaService {
     public VentaResponseDto registrar(VentaRequestDto request) {
         String direccionNormalizada = validarYNormalizarDireccion(request.getTipoEntrega(), request.getDireccion());
         LocalDate fecha = request.getFecha() != null ? request.getFecha() : LocalDate.now();
-        BigDecimal descuento = normalizarMoneda(request.getDescuento());
+        int descuento = request.getDescuento() != null ? request.getDescuento() : 0;
 
         Venta venta = new Venta();
         venta.setNombreCliente(request.getNombreCliente().trim());
@@ -76,20 +76,19 @@ public class VentaServiceImpl implements VentaService {
             sumaSubtotales = sumaSubtotales.add(linea.getSubtotal());
         }
 
-        if (descuento.compareTo(sumaSubtotales) > 0) {
-            throw new InvalidRequestException(
-                    "El descuento (" + descuento + ") no puede superar el subtotal de la venta (" + sumaSubtotales + ")");
-        }
-
-        venta.setTotal(sumaSubtotales.subtract(descuento).setScale(2, RoundingMode.HALF_UP));
+        BigDecimal montoDescuento = sumaSubtotales
+                .multiply(BigDecimal.valueOf(descuento))
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        venta.setTotal(sumaSubtotales.subtract(montoDescuento));
 
         for (Map.Entry<Long, Integer> entry : consumoTotalPorInsumo.entrySet()) {
             insumoService.descontarStock(entry.getKey(), entry.getValue());
         }
 
         Venta guardada = ventaRepository.save(venta);
-        log.info("Venta registrada con id={}, cliente={}, lineas={}, total={}",
-                guardada.getId(), guardada.getNombreCliente(), guardada.getLineas().size(), guardada.getTotal());
+        log.info("Venta registrada con id={}, cliente={}, lineas={}, descuento={}%, total={}",
+                guardada.getId(), guardada.getNombreCliente(), guardada.getLineas().size(),
+                guardada.getDescuento(), guardada.getTotal());
         return ventaMapper.toResponse(guardada);
     }
 

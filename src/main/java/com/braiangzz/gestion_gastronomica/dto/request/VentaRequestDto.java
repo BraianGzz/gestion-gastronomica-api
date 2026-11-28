@@ -3,17 +3,17 @@ package com.braiangzz.gestion_gastronomica.dto.request;
 import com.braiangzz.gestion_gastronomica.model.FormaPago;
 import com.braiangzz.gestion_gastronomica.model.TipoEntrega;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,8 +41,9 @@ public class VentaRequestDto {
     @NotNull(message = "La forma de pago es obligatoria")
     private FormaPago formaPago;
 
-    @PositiveOrZero(message = "El descuento no puede ser negativo")
-    private BigDecimal descuento;
+    @Min(value = 0, message = "El descuento no puede ser menor a 0")
+    @Max(value = 100, message = "El descuento no puede superar el 100%")
+    private Integer descuento;
 
     @NotEmpty(message = "La venta debe tener al menos una línea de venta")
     @Valid
